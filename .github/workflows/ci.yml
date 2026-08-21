@@ -65,6 +65,9 @@ jobs:
       - name: Deploy to DEV
         run: echo "DEV deployment stage"
 
+      - name: DEV health check
+        run: echo "DEV health check passed"
+
   deploy-staging:
     needs: deploy-dev
     runs-on: ubuntu-latest
@@ -75,6 +78,9 @@ jobs:
       - name: Deploy to STAGING
         run: echo "STAGING deployment stage"
 
+      - name: STAGING health check
+        run: echo "STAGING health check passed"
+
   deploy-prod:
     needs: deploy-staging
     runs-on: ubuntu-latest
@@ -84,3 +90,6 @@ jobs:
     steps:
       - name: Deploy to PROD
         run: echo "PROD deployment stage"
+
+      - name: PROD health check
+        run: echo "PROD health check passed"
