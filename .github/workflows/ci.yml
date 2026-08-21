@@ -93,3 +93,13 @@ jobs:
 
       - name: PROD health check
         run: echo "PROD health check passed"
+
+
+  rollback:
+    needs: deploy-prod
+    if: failure()
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Rollback deployment
+        run: echo "Rolling back to previous stable version..."
