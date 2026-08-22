@@ -79,11 +79,15 @@ jobs:
       name: staging
 
     steps:
-      - name: Deploy to STAGING
-        run: echo "STAGING deployment stage"
-
-      - name: STAGING health check
-        run: echo "STAGING health check passed"
+      - name: Deploy to STAGING EC2
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /home/ec2-user
+            ./deploy.sh ${{ github.sha }}
 
   deploy-prod:
     needs: deploy-staging
