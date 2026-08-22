@@ -112,5 +112,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Rollback deployment
-        run: echo "Rolling back to previous stable version..."
+      - name: Rollback PROD on EC2
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /home/ec2-user
+
+            if [ ! -f previous_tag.txt ]; then
+              echo "ERROR: No previous version found"
+              exit 1
+            fi
+
+            PREVIOUS_TAG=$(cat previous_tag.txt)
+
+            echo "Rolling back to: $PREVIOUS_TAG"
+
+            ./rollback.sh "$PREVIOUS_TAG"
