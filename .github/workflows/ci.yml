@@ -96,11 +96,15 @@ jobs:
       name: prod
 
     steps:
-      - name: Deploy to PROD
-        run: echo "PROD deployment stage"
-
-      - name: PROD health check
-        run: echo "PROD health check passed"
+      - name: Deploy to PROD EC2
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /home/ec2-user
+            ./deploy.sh ${{ github.sha }}
 
   rollback:
     needs: deploy-prod
